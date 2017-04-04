@@ -8,6 +8,8 @@ class Square extends Component {
     }
 
     squareClick() {
+        if (this.props.gameOver)
+            return;
         if (this.state.value === "") {
             this.setState({ value : this.props.currentPlayer });
             this.props.changeTurn(this.props.row, this.props.col);
@@ -24,16 +26,12 @@ class Square extends Component {
 }
 
 class Row extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
-            <div className="Row">
-                <Square row={this.props.row} col={0} changeTurn={this.props.changeTurn} currentPlayer={this.props.currentPlayer}/>
-                <Square row={this.props.row} col={1} changeTurn={this.props.changeTurn} currentPlayer={this.props.currentPlayer}/>
-                <Square row={this.props.row} col={2} changeTurn={this.props.changeTurn} currentPlayer={this.props.currentPlayer}/>
+            <div>
+                <Square row={this.props.row} col={0} changeTurn={this.props.changeTurn} currentPlayer={this.props.currentPlayer} gameOver={this.props.gameOver}/>
+                <Square row={this.props.row} col={1} changeTurn={this.props.changeTurn} currentPlayer={this.props.currentPlayer} gameOver={this.props.gameOver}/>
+                <Square row={this.props.row} col={2} changeTurn={this.props.changeTurn} currentPlayer={this.props.currentPlayer} gameOver={this.props.gameOver}/>
             </div>
         );
     }
@@ -48,7 +46,8 @@ class App extends Component {
       this.state = {
           currentPlayer : "x",
           message : "X's turn",
-          field : field
+          field : field,
+          gameOver : false
       };
       this.changeTurn = this.changeTurn.bind(this);
   }
@@ -102,10 +101,12 @@ class App extends Component {
           }
       if (!empty)
           return 2;
+
+      return 0;
   }
 
   changeTurn(row, col) {
-      let {currentPlayer, message, field} = this.state;
+      let {currentPlayer, message, field, gameOver } = this.state;
       if (currentPlayer === "x") {
           currentPlayer = "o";
           message = "O's turn";
@@ -124,10 +125,13 @@ class App extends Component {
       else if (winAnalyze === 2)
           message = "Draw";
 
+      gameOver = winAnalyze !== 0;
+
       this.setState({
           currentPlayer : currentPlayer,
           message : message,
-          field : field
+          field : field,
+          gameOver : gameOver
       });
   }
 
@@ -135,9 +139,9 @@ class App extends Component {
     return (
         <div>
             <div className="Field">
-                <Row row={0} changeTurn={this.changeTurn} currentPlayer={this.state.currentPlayer}/>
-                <Row row={1} changeTurn={this.changeTurn} currentPlayer={this.state.currentPlayer}/>
-                <Row row={2} changeTurn={this.changeTurn} currentPlayer={this.state.currentPlayer}/>
+                <Row row={0} changeTurn={this.changeTurn} currentPlayer={this.state.currentPlayer} gameOver={this.state.gameOver}/>
+                <Row row={1} changeTurn={this.changeTurn} currentPlayer={this.state.currentPlayer} gameOver={this.state.gameOver}/>
+                <Row row={2} changeTurn={this.changeTurn} currentPlayer={this.state.currentPlayer} gameOver={this.state.gameOver}/>
             </div>
             <div className="Message">
                 {this.state.message}
