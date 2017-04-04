@@ -42,25 +42,33 @@ class Row extends Component {
 class App extends Component {
   constructor(props) {
       super(props);
-      this.state = { currentPlayer : "x" };
+      this.state = { currentPlayer : "x", message : "X's turn" };
       this.changeTurn = this.changeTurn.bind(this);
   }
 
   changeTurn() {
-      let {currentPlayer} = this.state;
-      if (currentPlayer == "x")
+      let {currentPlayer, message} = this.state;
+      if (currentPlayer == "x") {
           currentPlayer = "o";
-      else
+          message = "O's turn";
+      } else {
           currentPlayer = "x";
-      this.setState({ currentPlayer : currentPlayer});
+          message = "X's turn";
+      }
+      this.setState({ currentPlayer : currentPlayer, message : message });
   }
 
   render() {
     return (
-        <div className="Field">
-            <Row changeTurn={this.changeTurn} currentPlayer={this.state.currentPlayer}/>
-            <Row changeTurn={this.changeTurn} currentPlayer={this.state.currentPlayer}/>
-            <Row changeTurn={this.changeTurn} currentPlayer={this.state.currentPlayer}/>
+        <div>
+            <div className="Field">
+                <Row changeTurn={this.changeTurn} currentPlayer={this.state.currentPlayer}/>
+                <Row changeTurn={this.changeTurn} currentPlayer={this.state.currentPlayer}/>
+                <Row changeTurn={this.changeTurn} currentPlayer={this.state.currentPlayer}/>
+            </div>
+            <div className="Message">
+                {this.state.message}
+            </div>
         </div>
     );
   }
