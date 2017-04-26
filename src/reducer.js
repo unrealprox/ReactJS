@@ -8,56 +8,35 @@ export const initialState = {
 };
 
 function analyzeSum(sum) {
-    if (sum === 3)
-        return 1;
-    if (sum === -3)
-        return -1;
-    return 0;
+    return parseInt(sum / 3, 0);
+}
+
+function calcSum(field, algo) {
+    let sum = 0;
+    for (var i = 0; i < 3; ++i)
+        sum += field[algo(i)];
+    return sum;
 }
 
 function analyzeWin(field) {
-    var i, j, sum, sumAnalyze;
+    let sums = [];
+    sums.push(calcSum(field, i => 3 * i + i));
+    sums.push(calcSum(field, i => 3 * i + 2 - i));
+    for (let j = 0; j < 3; ++j) {
+        sums.push(calcSum(field, i => 3 * i + j));
+        sums.push(calcSum(field, i => 3 * j + i));
+    }
 
-
-    for (i = 0; i < 3; ++i) {
-        sum = 0;
-        for (j = 0; j < 3; ++j)
-            sum += field[i * 3 + j];
-        sumAnalyze = analyzeSum(sum);
+    for (let i in sums) {
+        let sumAnalyze = analyzeSum(sums[i]);
         if (sumAnalyze !== 0)
             return sumAnalyze;
     }
-    for (i = 0; i < 3; ++i) {
-        sum = 0;
-        for (j = 0; j < 3; ++j)
-            sum += field[j * 3 + i];
-        sumAnalyze = analyzeSum(sum);
-        if (sumAnalyze !== 0)
-            return sumAnalyze;
-    }
-    sum = 0;
-    for (i = 0; i < 3; ++i)
-        sum += field[i * 3 + i];
-    sumAnalyze = analyzeSum(sum);
-    if (sumAnalyze !== 0)
-        return sumAnalyze;
-    sum = 0;
-    for (i = 0; i < 3; ++i)
-        sum += field[i * 3 + (2 - i)];
-    sumAnalyze = analyzeSum(sum);
-    if (sumAnalyze !== 0)
-        return sumAnalyze;
 
-    var empty = false;
-    for (i = 0; i < 9; ++i)
-        if (field[i] === 0) {
-            empty = true;
-            break;
-        }
-    if (!empty)
-        return 2;
-
-    return 0;
+    for (let i = 0; i < 9; ++i)
+        if (field[i] === 0)
+            return 0;
+    return 2;
 }
 
 export function changeField(state = initialState, action) {

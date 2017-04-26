@@ -27,6 +27,6 @@ export default connect(
         field: store.field
     }),
     dispatch => ({
-        setField: (event) => dispatch(setField(parseInt(event.target.dataset['row']), parseInt(event.target.dataset['col'])))
+        setField: (event) => dispatch(setField(parseInt(event.target.dataset['row'], 0), parseInt(event.target.dataset['col'], 0)))
     })
 )(Square);
