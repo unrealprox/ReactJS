@@ -1,7 +1,7 @@
 import { SET_FIELD } from './actions'
 
 export const initialState = {
-    currentPlayer: 'x',
+    currentPlayerX: true,
     field: [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
     message: "X's turn",
     gameOver: false
@@ -64,21 +64,18 @@ export function changeField(state = initialState, action) {
   switch (action.type) {
       case SET_FIELD:
           let { row, col } = action.data;
-          let { currentPlayer, message, field, gameOver } = state;
+          let { currentPlayerX, message, field, gameOver } = state;
           field = field.slice();
 
-          if (field[3 * row + col] != 0 || gameOver)
+          if (field[3 * row + col] !== 0 || gameOver)
               return state;
 
-          if (currentPlayer === "x") {
-              currentPlayer = "o";
+          if (currentPlayerX)
               message = "O's turn";
-              field[3 * row + col] = 1;
-          } else {
-              currentPlayer = "x";
+          else
               message = "X's turn";
-              field[3 * row + col] = -1;
-          }
+          field[3 * row + col] = currentPlayerX ? 1 : -1;
+          currentPlayerX = !currentPlayerX;
 
           let winAnalyze = analyzeWin(field);
           if (winAnalyze === 1)
@@ -91,7 +88,7 @@ export function changeField(state = initialState, action) {
           gameOver = winAnalyze !== 0;
 
           return {
-              currentPlayer : currentPlayer,
+              currentPlayerX : currentPlayerX,
               message : message,
               field : field,
               gameOver : gameOver

@@ -1,19 +1,12 @@
 import React from 'react';
-import { connect, dispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types'
 
 import { setField } from './actions'
 import './Square.css';
 
 const getSquareValue = value => {
-    switch (value) {
-        case 0:
-            return ' ';
-        case 1:
-            return 'x';
-        case -1:
-            return 'o';
-    }
+    return value === 1 ? 'x' : value === -1 ? 'o' : ' ';
 }
 
 const Square = ({ field, row, col, setField }) => (
